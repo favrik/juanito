@@ -1,75 +1,56 @@
 import { Link } from "@remix-run/react";
 
-import { useOptionalUser } from "~/utils";
-
-const linkClass =
-  "shadow-inner text-center py-4 block shadow-cyan-500/50 rounded-xl";
-const traitClass = "";
-
-const menu = [
-  { link: "/", title: "Adopta!" },
-  { link: "/historia", title: "Historia" },
-  { link: "/porque", title: "Porque" },
-  { link: "/contacto", title: "Contacto" },
-];
-
-const perritos = [
-  {
-    name: "Cony",
-    age: 2,
-    traits: [
-      "sociable con su manada",
-      "un poco desconfiada",
-      "juguetona con su manada",
-    ],
-    notes: "Le gusta mordisquear las cosas",
-  },
-  {
-    name: "Prietita",
-    age: 2,
-    traits: ["amigable", "sociable con su manada", "juguetona con su manada"],
-    notes: "Nació sin un ojo",
-  },
-];
+import menu from "~/components/menu";
+import perritos from "~/models/perritos";
 
 export default function Index() {
-  const user = useOptionalUser();
   return (
     <main className="relative bg-white sm:flex sm:items-center sm:justify-center">
       <div className="relative sm:pb-16 sm:pt-8">
         <div className="max-w-7xl sm:px-6 lg:px-8">
           <div className="">
-            <h1 className="text-center font-extrabold tracking-tight sm:text-8xl">
+            <h1 className="p-5 text-center text-6xl font-extrabold tracking-tight">
               Adopta un Perrito!
             </h1>
 
             <ul className="flex flex-row">
-              {menu.map(({ link, title }) => (
+              {menu.map(({ link, title, icon }) => (
                 <li className="flex-1">
-                  <Link className={linkClass} to={link}>
+                  <Link className="" to={link}>
+                    <span className="flex ">{icon}</span>
                     {title}
                   </Link>
                 </li>
               ))}
             </ul>
 
+            <p className="p-10 text-xl font-bold shadow-xl">
+              Todos los perritos se entregan desparasitados, esterilizados y
+              vacunados (con carnet).
+            </p>
             <div className="">
-              {perritos.map(({ name, age, traits, notes }) => (
-                <div className="grid grid-cols-3 gap-2">
+              {perritos.map(({ name, age, traits, images, notes }) => (
+                <div className="grid grid-cols-1 gap-4 py-8 md:grid-cols-3">
                   <div className="col-span-1">
-                    <img src="" />
+                    <img
+                      className="h-auto max-w-full rounded-lg"
+                      src={`/images/${images[0]}`}
+                    />
                   </div>
-                  <div className="col-span 2">
+                  <div className="col-span-2">
                     <h2>
-                      Mi Nombre es <span className="">{name}</span>
+                      Mi nombre es <span className="">{name}</span>.
                     </h2>
                     <p>
-                      Edad: <span className="">{age} años</span>
+                      Tengo <span className="">{age} años</span> de edad.
                     </p>
                     <p>
-                      {traits.map((trait) => (
-                        <span className={traitClass}>{trait}</span>
-                      ))}
+                      Soy:{" "}
+                      {traits
+                        .map<React.ReactNode>((trait) => (
+                          <span className="">{trait}</span>
+                        ))
+                        .reduce((prev, curr) => [prev, ", ", curr])}
                     </p>
                     {notes && (
                       <div>
